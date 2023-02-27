@@ -18,6 +18,11 @@ add_library(${MODULE_NAME}
     backends/imgui_impl_opengl3_loader.h 
 )
 
+target_link_libraries(${MODULE_NAME}
+    PUBLIC
+		wrangled_gl
+)
+
 target_include_directories(
     ${MODULE_NAME} PUBLIC 
         .

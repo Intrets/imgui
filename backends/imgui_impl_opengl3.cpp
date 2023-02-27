@@ -340,11 +340,63 @@ bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
     return true;
 }
 
+bool    ImGui_ImplOpenGL3_Init_Custom(ImGuiIO& io)
+{
+    ImGui_ImplOpenGL3_Data* bd = IM_NEW(ImGui_ImplOpenGL3_Data)();
+    io.BackendRendererUserData = (void*)bd;
+    io.BackendRendererName = "imgui_impl_opengl3";
+
+    GLint major = 0;
+    GLint minor = 0;
+    glGetIntegerv(GL_MAJOR_VERSION, &major);
+    glGetIntegerv(GL_MINOR_VERSION, &minor);
+    if (major == 0 && minor == 0)
+    {
+        // Query GL_VERSION in desktop GL 2.x, the string will start with "<major>.<minor>"
+        const char* gl_version = (const char*)glGetString(GL_VERSION);
+        sscanf(gl_version, "%d.%d", &major, &minor);
+    }
+    bd->GlVersion = (GLuint)(major * 100 + minor * 10);
+
+    bd->UseBufferSubData = false;
+#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_VTX_OFFSET
+    if (bd->GlVersion >= 320)
+        io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
+#endif
+
+	strcpy(bd->GlslVersionString, "#version 330\n");
+
+    bd->HasClipOrigin = (bd->GlVersion >= 450);
+
+#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_EXTENSIONS
+    GLint num_extensions = 0;
+    glGetIntegerv(GL_NUM_EXTENSIONS, &num_extensions);
+    for (GLint i = 0; i < num_extensions; i++)
+    {
+        const char* extension = (const char*)glGetStringi(GL_EXTENSIONS, i);
+        if (extension != nullptr && strcmp(extension, "GL_ARB_clip_control") == 0)
+            bd->HasClipOrigin = true;
+    }
+#endif
+
+    return true;
+}
+
 void    ImGui_ImplOpenGL3_Shutdown()
 {
     ImGui_ImplOpenGL3_Data* bd = ImGui_ImplOpenGL3_GetBackendData();
     IM_ASSERT(bd != nullptr && "No renderer backend to shutdown, or already shutdown?");
     ImGuiIO& io = ImGui::GetIO();
+
+    ImGui_ImplOpenGL3_DestroyDeviceObjects();
+    io.BackendRendererName = nullptr;
+    io.BackendRendererUserData = nullptr;
+    IM_DELETE(bd);
+}
+
+void    ImGui_ImplOpenGL3_Shutdown_Custom(ImGuiIO& io)
+{
+    ImGui_ImplOpenGL3_Data* bd = reinterpret_cast<ImGui_ImplOpenGL3_Data*>(io.BackendRendererUserData);
 
     ImGui_ImplOpenGL3_DestroyDeviceObjects();
     io.BackendRendererName = nullptr;
