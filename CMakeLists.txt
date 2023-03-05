@@ -16,6 +16,7 @@ add_library(${MODULE_NAME}
     imstb_truetype.h
     backends/imgui_impl_opengl3.h backends/imgui_impl_opengl3.cpp
     backends/imgui_impl_opengl3_loader.h 
+    misc/cpp/imgui_stdlib.h misc/cpp/imgui_stdlib.cpp
 )
 
 target_link_libraries(${MODULE_NAME}
@@ -27,4 +28,5 @@ target_include_directories(
     ${MODULE_NAME} PUBLIC 
         .
         backends
+        misc/cpp
 )
