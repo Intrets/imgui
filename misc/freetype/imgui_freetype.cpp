@@ -59,14 +59,9 @@
 // Data
 //-------------------------------------------------------------------------
 
-// Default memory allocators
-static void* ImGuiFreeTypeDefaultAllocFunc(size_t size, void* user_data) { IM_UNUSED(user_data); return IM_ALLOC(size); }
-static void  ImGuiFreeTypeDefaultFreeFunc(void* ptr, void* user_data) { IM_UNUSED(user_data); IM_FREE(ptr); }
-
-// Current memory allocators
-static void* (*GImGuiFreeTypeAllocFunc)(size_t size, void* user_data) = ImGuiFreeTypeDefaultAllocFunc;
-static void  (*GImGuiFreeTypeFreeFunc)(void* ptr, void* user_data) = ImGuiFreeTypeDefaultFreeFunc;
-static void* GImGuiFreeTypeAllocatorUserData = NULL;
+constexpr ImGuiMemAllocFunc GImGuiFreeTypeAllocFunc = [](size_t size, void* user_data) { IM_UNUSED(user_data); return IM_ALLOC(size); };
+constexpr ImGuiMemFreeFunc GImGuiFreeTypeFreeFunc = [](void* ptr, void* user_data) { IM_UNUSED(user_data); IM_FREE(ptr); };
+constexpr void* GImGuiFreeTypeAllocatorUserData = nullptr;
 
 //-------------------------------------------------------------------------
 // Code
@@ -231,11 +226,11 @@ namespace
         if (glyph_index == 0)
             return NULL;
 
-		// If this crash for you: FreeType 2.11.0 has a crash bug on some bitmap/colored fonts.
-		// - https://gitlab.freedesktop.org/freetype/freetype/-/issues/1076
-		// - https://github.com/ocornut/imgui/issues/4567
-		// - https://github.com/ocornut/imgui/issues/4566
-		// You can use FreeType 2.10, or the patched version of 2.11.0 in VcPkg, or probably any upcoming FreeType version.
+        // If this crash for you: FreeType 2.11.0 has a crash bug on some bitmap/colored fonts.
+        // - https://gitlab.freedesktop.org/freetype/freetype/-/issues/1076
+        // - https://github.com/ocornut/imgui/issues/4567
+        // - https://github.com/ocornut/imgui/issues/4566
+        // You can use FreeType 2.10, or the patched version of 2.11.0 in VcPkg, or probably any upcoming FreeType version.
         FT_Error error = FT_Load_Glyph(Face, glyph_index, LoadFlags);
         if (error)
             return NULL;
@@ -783,9 +778,7 @@ const ImFontBuilderIO* ImGuiFreeType::GetBuilderForFreeType()
 
 void ImGuiFreeType::SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* user_data), void (*free_func)(void* ptr, void* user_data), void* user_data)
 {
-    GImGuiFreeTypeAllocFunc = alloc_func;
-    GImGuiFreeTypeFreeFunc = free_func;
-    GImGuiFreeTypeAllocatorUserData = user_data;
+    assert(0);
 }
 
 #ifdef __GNUC__
