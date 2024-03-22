@@ -36,7 +36,6 @@ add_library(${MODULE_NAME}_glfw
 	backends/imgui_impl_glfw.h backends/imgui_impl_glfw.cpp
 )
 
-find_package(GLFW3 REQUIRED)
 target_link_libraries(${MODULE_NAME}_glfw
 	PUBLIC
         GLFW3
