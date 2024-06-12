@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 2.18)
 
 set(MODULE_NAME imgui)
 
@@ -36,12 +36,12 @@ add_library(${MODULE_NAME}_glfw
 	backends/imgui_impl_glfw.h backends/imgui_impl_glfw.cpp
 )
 
-find_package(GLFW3 REQUIRED)
-target_link_libraries(${MODULE_NAME}_glfw
-	PUBLIC
-        GLFW3
-		imgui
-)
+#find_package(GLFW3 REQUIRED)
+#target_link_libraries(${MODULE_NAME}_glfw
+#	PUBLIC
+#        GLFW3
+#		imgui
+#)
 
 target_include_directories(
 	${MODULE_NAME}_glfw PUBLIC
