@@ -19,7 +19,7 @@ add_library(${MODULE_NAME}
 	misc/cpp/imgui_stdlib.h misc/cpp/imgui_stdlib.cpp
 )
 
-target_compile_definitions(${MODULE_NAME} PUBLIC ImTextureID=GLint)
+target_compile_definitions(${MODULE_NAME} PUBLIC ImTextureID=GLuint)
 
 target_link_libraries(${MODULE_NAME}
 	PUBLIC
