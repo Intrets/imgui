@@ -11285,6 +11285,10 @@ bool ImGui::BeginItemTooltip()
     return BeginTooltipEx(ImGuiTooltipFlags_None, ImGuiWindowFlags_None);
 }
 
+bool ImGui::BeginTooltipEx(ImGuiWindowFlags extra_window_flags) {
+    return BeginTooltipEx(ImGuiTooltipFlags_None, extra_window_flags);
+}
+
 bool ImGui::BeginTooltipEx(ImGuiTooltipFlags tooltip_flags, ImGuiWindowFlags extra_window_flags)
 {
     ImGuiContext& g = *GImGui;
