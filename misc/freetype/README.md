@@ -7,7 +7,7 @@ Build font atlases using FreeType instead of stb_truetype (which is the default 
 
 1. Get latest FreeType binaries or build yourself (under Windows you may use vcpkg with `vcpkg install freetype --triplet=x64-windows`, `vcpkg integrate install`).
 2. Add imgui_freetype.h/cpp alongside your project files.
-3. Add `#define IMGUI_ENABLE_FREETYPE` in your [imconfig.h](https://github.com/ocornut/imgui/blob/master/imconfig.h) file
+3. Add `#define IMGUI_ENABLE_FREETYPE` in your [imconfig.h](https://github.com/ocornut/imgui/blob/master/imconfig.h) file to make Dear ImGui automatically use the imgui_freetype loader. If your copy Dear ImGui is precompiled, you can always enable imgui_freetype by calling ImFontAtlas::SetFontLoader().
 
 ### About Gamma Correct Blending
 
@@ -48,15 +48,7 @@ Requires: [lunasvg](https://github.com/sammycage/lunasvg) v2.3.2 and above
 
 #### Using plutosvg (and plutovg)
 - Add `#define IMGUI_ENABLE_FREETYPE_PLUTOSVG` in your `imconfig.h`.
-- Compile and link with plutosvg *and* plutovg (which is required by plutosvg)
-
-_Compilation hints for plutovg_
-- Compile all source files in `plutovg/source/*.c`
-- Add include directory: `plutovg/include` + `plutovg/stb`
-
-_Compilation hints for plutosvg_
-- Compile `plutosvg/source/plutosvg.c`
-- Add include directory: `plutosvg/source`
-- Add define: `PLUTOSVG_HAS_FREETYPE`
-- Link with: plutovg, freetype
-
+- Get latest plutosvg binaries or build yourself. Under Windows you may use vcpkg with: `vcpkg install plutosvg --triplet=x64-windows`. Alternatively, if you build imgui from vcpkg, you just need to enable the plutosvg feature: `vcpkg install imgui[plutosvg] --triplet=x64-windows`
+- If you prefer to build plutosvg manually:
+    - Compilation hints for plutovg: Compile all source files in `plutovg/source/*.c` + Add include directory: `plutovg/include` + `plutovg/stb`
+    - Compilation hints for plutosvg: Compile `plutosvg/source/plutosvg.c` + Add include directory: `plutosvg/source` + Add define: `PLUTOSVG_HAS_FREETYPE` + Link with: plutovg, freetype
