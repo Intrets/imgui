@@ -17,14 +17,17 @@ add_library(${MODULE_NAME}
 	backends/imgui_impl_opengl3.h backends/imgui_impl_opengl3.cpp
 	backends/imgui_impl_opengl3_loader.h
 	misc/cpp/imgui_stdlib.h misc/cpp/imgui_stdlib.cpp
+	backends/imgui_impl_vulkan.h backends/imgui_impl_vulkan.cpp
 )
 
-target_compile_definitions(${MODULE_NAME} PUBLIC ImTextureID=GLuint)
+if (IMGUI_USE_OPENGL)
+    target_compile_definitions(${MODULE_NAME} PUBLIC ImTextureID=GLuint)
 
-target_link_libraries(${MODULE_NAME}
-	PUBLIC
-		wrangled_gl
-)
+    target_link_libraries(${MODULE_NAME}
+        PUBLIC
+            wrangled_gl
+    )
+endif()
 
 target_include_directories(
 	${MODULE_NAME} PUBLIC
