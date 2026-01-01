@@ -440,6 +440,7 @@ bool    ImGui_ImplOpenGL3_Init_Custom(ImGuiIO& io)
     if (bd->GlVersion >= 320)
         io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
 #endif
+    io.BackendFlags |= ImGuiBackendFlags_RendererHasTextures;       // We can honor ImGuiPlatformIO::Textures[] requests during render.
 
 	strcpy(bd->GlslVersionString, "#version 330\n");
 
