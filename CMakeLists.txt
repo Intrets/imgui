@@ -14,18 +14,25 @@ add_library(${MODULE_NAME}
 	imstb_rectpack.h
 	imstb_textedit.h
 	imstb_truetype.h
-	backends/imgui_impl_opengl3.h backends/imgui_impl_opengl3.cpp
-	backends/imgui_impl_opengl3_loader.h
 	misc/cpp/imgui_stdlib.h misc/cpp/imgui_stdlib.cpp
-	backends/imgui_impl_vulkan.h backends/imgui_impl_vulkan.cpp
 )
 
 if (IMGUI_USE_OPENGL)
+    target_sources(${MODULE_NAME} PRIVATE
+        backends/imgui_impl_opengl3.h backends/imgui_impl_opengl3.cpp
+        backends/imgui_impl_opengl3_loader.h
+    )
+
     target_compile_definitions(${MODULE_NAME} PUBLIC ImTextureID=GLuint)
+    target_compile_definitions(${MODULE_NAME} PUBLIC IMGUI_USE_OPENGL)
 
     target_link_libraries(${MODULE_NAME}
         PUBLIC
             wrangled_gl
+    )
+elseif(IMGUI_USE_VULKAN)
+    target_sources(${MODULE_NAME} PRIVATE
+        backends/imgui_impl_vulkan.h backends/imgui_impl_vulkan.cpp
     )
 endif()
 
@@ -35,7 +42,6 @@ target_include_directories(
 		backends
 		misc/cpp
 )
-
 
 add_library(${MODULE_NAME}_glfw
 	backends/imgui_impl_glfw.h backends/imgui_impl_glfw.cpp
